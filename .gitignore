@@ -1,0 +1,9 @@
+.idea
+*sublime*
+
+*.lock
+*.log
+
+.DS_Store
+dist
+node_modules
