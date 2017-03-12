@@ -10,7 +10,7 @@ const webserver = require('gulp-webserver');
 const debug = process.env.NODE_ENV !== 'production';
 
 gulp.task('js', done => {
-    return gulp.src('src/js/**/*.js')
+    return gulp.src('src/js/**/*.jsx')
         .pipe(plumber())
         .pipe(webpackStream({
             watch: debug,
@@ -18,7 +18,7 @@ gulp.task('js', done => {
                 filename: 'index.js'
             },
             module: {
-                 loaders: [ { test: /\.js?$/, loader: 'babel' } ],
+                 loaders: [ { test: /\.jsx?$/, loader: 'babel' } ],
                  query: {
                         presets: [
                             require.resolve('babel-preset-es2015'),
@@ -33,14 +33,20 @@ gulp.task('js', done => {
 });
 
 
-gulp.task('webserver', function() {
-  gulp.src('./dist')
-    .pipe(plumber())
-    .pipe(webserver({
-      livereload: true,
-    }));
+gulp.task('webserver', () => {
+    gulp.src('./dist')
+        .pipe(plumber())
+        .pipe(webserver({
+            livereload: true,
+        }));
 });
+
+gulp.task('assets', () => {
+    gulp.src('./src/index.html')
+        .pipe(named())
+        .pipe(gulp.dest('./dist/'))
+})
 
 
 /** @gulp: default */
-gulp.task('default', ['js', 'webserver']);
+gulp.task('default', ['js', 'assets', 'webserver']);
